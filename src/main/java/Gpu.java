@@ -328,14 +328,31 @@ class Gpu extends JPanel {
                     // if this sprite has priority OR shows under the bg
                     // then render the pixel
                     if(     (((obj.x + x) >= 0) && ((obj.x + x) < 160)) &&
-                            (tilerow[x] != 0) &&
+                            // remove this line ,because obj.isXflip,tilerow display from [7-x] // by fanboynet
+                         //   (tilerow[x] != 0) &&
                             (!obj.belowBackground || scanrow[obj.x + x] <= 0)
                     ) {
                         // If the sprite is X-flipped,
                         // write pixels in reverse order
-                        color = pal[tilerow[obj.isXflip ? (7-x) : x]];
+                        // bug code , obj.isXflip,can not display.// by fanboynet
+                        // color = pal[tilerow[obj.isXflip ? (7-x) : x]];
+                        // screen[canvasoffs] = color;
+                        // change to this code:,
+                        // Super Mario Land (World).gb press left button,mario turn left can be display
+                        if (obj.isXflip){
+                            if (tilerow[(7-x)] != 0){
+                                color = pal[tilerow[(7-x)]];
+                                screen[canvasoffs] = color;
+                            }
+                        }else{
+                            if (tilerow[x] != 0){
+                                color = pal[tilerow[x]];
+                                screen[canvasoffs] = color;
+                            }
+                        }
 
-                        screen[canvasoffs] = color;
+
+
                     }
 
                     canvasoffs++;
